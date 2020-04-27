@@ -7,15 +7,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-// cmd tested successfully in CentOS 7
-
+/**
+ * All cmds tested successfully on CentOS 7;
+ * run cmds after edit /etc/sudoers.d/username:
+ * >
+ * username hostname = NOPASSWD:/usr/bin/ls,/usr/bin/mkdir,/usr/bin/chown,/usr/sbin/groupadd,/usr/sbin/useradd
+ * >
+ * or simple one, but not recommend:
+ * >
+ * username ALL = NOPASSWD:ALL
+ * >
+ */
 public class ProcessLinux {
     public String stderr, stdout;
 
     /**
      * run a cmd
-     * @param cmd: the cmd to run
-     * @return int: exitValue
+     * @param cmd the cmd to run
+     * @return int exitValue
      */
     public int RunCmd(List<String> cmd) {
         ProcessBuilder processBuilder;
@@ -65,8 +74,8 @@ public class ProcessLinux {
 
     /**
      * List a dir
-     * @param path: the path to list
-     * @return int: exitValue
+     * @param path the path to list
+     * @return int exitValue
      */
     public int ListDir(String path) {
         List<String> cmd;
@@ -77,8 +86,8 @@ public class ProcessLinux {
 
     /**
      * Create a dir
-     * @param path: the path to create
-     * @return int: exitValue
+     * @param path the path to create
+     * @return int exitValue
      */
     public int CreateDir(String path) {
         List<String> cmd;
@@ -89,22 +98,22 @@ public class ProcessLinux {
 
     /**
      * Change owner of a dir
-     * @param path: the path to change owner
-     * @param user: the owner user
-     * @param group: the owner group
-     * @return int: exitValue
+     * @param path the path to change owner
+     * @param userName the owner userName
+     * @param groupName the owner groupName
+     * @return int exitValue
      */
-    public int ChownDir(String path, String user, String group) {
+    public int ChownDir(String path, String userName, String groupName) {
         List<String> cmd;
 
-        cmd = Arrays.asList("sudo", "chown", user + ":" + group, path);
+        cmd = Arrays.asList("sudo", "chown", userName + ":" + groupName, path);
         return RunCmd(cmd);
     }
 
     /**
      * Create a group
-     * @param groupName: group name
-     * @return int: exitValue
+     * @param groupName group name
+     * @return int exitValue
      */
     public int CreateGroup(String groupName) {
         List<String> cmd;
@@ -115,8 +124,8 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username) {
         List<String> cmd;
@@ -127,9 +136,9 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @param password: password of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @param password password of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username, String password) {
         String cmd;
@@ -145,9 +154,9 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @param password: password of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @param password password of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username, String password, String groupName) {
         String cmd;
@@ -164,10 +173,10 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @param password: password of the new account
-     * @param homeDir: home directory of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @param password password of the new account
+     * @param homeDir home directory of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username, String password, String groupName,
                           String homeDir) {
@@ -186,11 +195,11 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @param password: password of the new account
-     * @param homeDir: home directory of the new account
-     * @param shell: login shell of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @param password password of the new account
+     * @param homeDir home directory of the new account
+     * @param shell login shell of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username, String password, String groupName,
                           String homeDir, String shell) {
@@ -210,12 +219,12 @@ public class ProcessLinux {
 
     /**
      * Create a user
-     * @param username: username of the new account
-     * @param password: password of the new account
-     * @param homeDir: home directory of the new account
-     * @param shell: login shell of the new account
-     * @param comment: GECOS field of the new account
-     * @return int: exitValue
+     * @param username username of the new account
+     * @param password password of the new account
+     * @param homeDir home directory of the new account
+     * @param shell login shell of the new account
+     * @param comment GECOS field of the new account
+     * @return int exitValue
      */
     public int CreateUser(String username, String password, String groupName,
                           String homeDir, String shell, String comment) {

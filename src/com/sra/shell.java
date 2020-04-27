@@ -9,88 +9,104 @@ public class shell {
     public static void main(String[] args) {
         ProcessLinux pl = new ProcessLinux();
 
-        // list a dir
+        String topDirUserName = "root";
+        String groupName = "sra";
+        String topHomeDir = "/data/sra";
+        String shell = "/usr/sbin/nologin";
+        String comment = "sra user";
+
+        // The whole process of creating sra users
+        CreateGroup(pl, groupName);
+        CreateDir(pl, topHomeDir);
+        ChownDir(pl, topHomeDir, topDirUserName, groupName);
+        // creating a user
+        CreateUser(pl,"zhq", "123", groupName,
+                topHomeDir, shell, comment);
+        // one more user
+        CreateUser(pl,"zhq1", "123", groupName,
+                topHomeDir, shell, comment);
+
+        // Listing a dir
         ListDirExample(pl, "/data/sra/zhq");
         ListDirExample(pl, "/notexist");
 
-        // create a sra user
-        CreateUserExample( pl,"zhq", "123");
-        CreateUserExample( pl,"zhq1", "123");
-
-        // a wrong usage of RunCmd()
+        // A wrong usage of RunCmd()
         RunCmdWrongExample(pl);
     }
 
-    // example - list a dir
+    // Print stderr or stdout
+    private static void PrintOutOrErr(ProcessLinux pl, int exitValue) {
+        if (exitValue != 0 && pl.stderr.length() > 0) {
+            System.out.println(pl.stderr);
+        } else if (pl.stdout.length() > 0) {
+            System.out.println(pl.stdout);
+        } else {
+            System.out.println();
+        }
+    }
+
+    // Listing a dir
     private static void ListDirExample(ProcessLinux pl, String path) {
         int exitValue;
 
         exitValue = pl.ListDir(path);
 
-        // print stderr or stdout
-        System.out.println("ls " + path);
-        if (exitValue != 0 && pl.stderr.length() > 0) {
-            System.out.println(pl.stderr);
-        } else if (pl.stdout.length() > 0) {
-            System.out.println(pl.stdout);
-        } else {
-            System.out.println();
-        }
+        System.out.println("Listing dir " + path);
+        PrintOutOrErr(pl, exitValue);
     }
 
-    // example - create a sra user
-    private static void CreateUserExample(ProcessLinux pl, String username,
-                                          String password) {
+    // Creating the top dir of home dir
+    private static void CreateDir(ProcessLinux pl, String topHomeDir) {
         int exitValue;
-        String groupName = "sra";
-        String topHomeDir = "/data/sra";
+
+        exitValue = pl.CreateDir(topHomeDir);
+
+        System.out.println("Creating dir " + topHomeDir);
+        PrintOutOrErr(pl, exitValue);
+    }
+
+    // Changing owner of a dir
+    private static void ChownDir(ProcessLinux pl, String topHomeDir,
+                                 String username, String groupName) {
+        int exitValue;
+
+        exitValue = pl.ChownDir(topHomeDir, username, groupName);
+
+        System.out.println("Changing owner of dir " + topHomeDir);
+        PrintOutOrErr(pl, exitValue);
+    }
+
+    // Creating a group
+    private static void CreateGroup(ProcessLinux pl, String groupName) {
+        int exitValue;
+
+        exitValue = pl.CreateGroup(groupName);
+
+        System.out.println("Creating group " + groupName);
+        PrintOutOrErr(pl, exitValue);
+    }
+
+    // Creating a user
+    private static void CreateUser(ProcessLinux pl, String username,
+                                   String password, String groupName,
+                                   String topHomeDir, String shell,
+                                   String comment) {
+        int exitValue;
 
         exitValue = pl.CreateUser(username, password, groupName,
                 String.format("%s/%s", topHomeDir, username),
-                "/usr/sbin/nologin",
-                "sra user");
+                shell, comment);
 
-        // print stderr or stdout
-        System.out.println("create sra user - " + username);
-        if (exitValue != 0 && pl.stderr.length() > 0) {
-            System.out.println(pl.stderr);
-        } else if (pl.stdout.length() > 0) {
-            System.out.println(pl.stdout);
-        } else {
-            System.out.println();
-        }
+        System.out.println("Creating user " + username);
+        PrintOutOrErr(pl, exitValue);
     }
 
-    // example - a wrong usage of RunCmd()
+    // A wrong usage of RunCmd()
     private static void RunCmdWrongExample(ProcessLinux pl) {
         List<String> voidCmd = new ArrayList<>();
 
-        System.out.println("a wrong example of RunCmd():");
+        System.out.println("A wrong example of RunCmd():");
         pl.RunCmd(voidCmd);
     }
 
-    /*
-    // old
-    public static void main1(String[] args) {
-        String out;
-        boolean flag;
-
-        // run a cmd
-        out = execLinux.exec("sudo pwd");
-        System.out.print("run a cmd 'sudo pwd':\n" + out);
-
-        // create a user
-        System.out.print("\ncreate a user:\n");
-        flag = execLinux.createUser("zhq", "123");
-        if (flag) {
-            System.out.println("finish.");
-        } else {
-            System.out.println("error.");
-        }
-
-        // list a dir
-        out = execLinux.listDir("/data/sra/zhq");
-        System.out.print("\nls /data/sra/zhq:\n" + out);
-    }
-    */
 }
