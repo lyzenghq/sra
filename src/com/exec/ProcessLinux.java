@@ -111,6 +111,22 @@ public class ProcessLinux {
     }
 
     /**
+     * Move all files between two Dirs
+     * @param Source the source dir
+     * @param Dest the dest dir
+     * @return int exitValue
+     */
+    public int MoveAllFiles(String Source, String Dest) {
+        String cmd;
+        List<String> fullCmd;
+
+        cmd = String.format("sudo mv %s/* %s/",
+                Source, Dest);
+        fullCmd = Arrays.asList("bash", "-c", cmd);
+        return RunCmd(fullCmd);
+    }
+
+    /**
      * Create a group
      * @param groupName group name
      * @return int exitValue
