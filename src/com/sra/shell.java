@@ -16,19 +16,26 @@ public class shell {
         String comment = "sra user";
 
         // The whole process of creating sra users
+        // Creating the group of sra users
         CreateGroup(pl, groupName);
+        // Creating the top-home-dir of sra users
         CreateDir(pl, topHomeDir);
+        // Change owner of the top-home-dir
         ChownDir(pl, topHomeDir, topDirUserName, groupName);
-        // creating a user
+        // Creating a sra user
         CreateUser(pl,"zhq", "123", groupName,
                 topHomeDir, shell, comment);
-        // one more user
+        // Creating one more sra users
         CreateUser(pl,"zhq1", "123", groupName,
                 topHomeDir, shell, comment);
 
+        // Move all files between two Dirs
+        MoveAllFiles(pl, "/data/sra/zhq", "/data/sra/zhq1");
+
         // Listing a dir
-        ListDirExample(pl, "/data/sra/zhq");
-        ListDirExample(pl, "/notexist");
+        ListDir(pl, "/data/sra/zhq");
+        ListDir(pl, "/data/sra/zhq1");
+        ListDir(pl, "/notexist");
 
         // A wrong usage of RunCmd()
         RunCmdWrongExample(pl);
@@ -46,12 +53,22 @@ public class shell {
     }
 
     // Listing a dir
-    private static void ListDirExample(ProcessLinux pl, String path) {
+    private static void ListDir(ProcessLinux pl, String path) {
         int exitValue;
 
         exitValue = pl.ListDir(path);
 
         System.out.println("Listing dir " + path);
+        PrintOutOrErr(pl, exitValue);
+    }
+
+    // Move all files between two Dirs
+    private static void MoveAllFiles(ProcessLinux pl, String Source, String Dest) {
+        int exitValue;
+
+        exitValue = pl.MoveAllFiles(Source, Dest);
+
+        System.out.println("Moving all files from " + Source + " to " + Dest);
         PrintOutOrErr(pl, exitValue);
     }
 
