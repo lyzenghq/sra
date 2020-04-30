@@ -12,7 +12,7 @@ public class shell {
         String topDirUserName = "root";
         String groupName = "sra";
         String topHomeDir = "/data/sra";
-        String shell = "/usr/sbin/nologin";
+        String shell = "/bin/bash";
         String comment = "sra user";
 
         // The whole process of creating sra users
