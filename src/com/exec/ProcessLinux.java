@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * All cmds tested successfully on CentOS 7;
  * run cmds after edit /etc/sudoers.d/username:
  * >
- * username hostname = NOPASSWD:/usr/bin/ls,/usr/bin/mkdir,/usr/bin/chown,/usr/sbin/groupadd,/usr/sbin/useradd
+ * username hostname = NOPASSWD:/usr/bin/ls,/usr/bin/mkdir,/usr/bin/chown,/usr/bin/chmod,/usr/sbin/groupadd,/usr/sbin/useradd
  * >
  * or simple one, but not recommend:
  * >
@@ -107,6 +107,19 @@ public class ProcessLinux {
         List<String> cmd;
 
         cmd = Arrays.asList("sudo", "chown", userName + ":" + groupName, path);
+        return RunCmd(cmd);
+    }
+
+    /**
+     * Change the mode of dir
+     * @param path the path to change mode
+     * @param mode the mode
+     * @return int exitValue
+     */
+    public int ChmodDir(String path, String mode) {
+        List<String> cmd;
+
+        cmd = Arrays.asList("sudo", "chmod", mode, path);
         return RunCmd(cmd);
     }
 

@@ -22,6 +22,8 @@ public class shell {
         CreateDir(pl, topHomeDir);
         // Change owner of the top-home-dir
         ChownDir(pl, topHomeDir, topDirUserName, groupName);
+        // Change the mode of dir
+        ChmodDir(pl, topHomeDir, "g+rX");
         // Creating a sra user
         CreateUser(pl,"zhq", "123", groupName,
                 topHomeDir, shell, comment);
@@ -72,24 +74,35 @@ public class shell {
         PrintOutOrErr(pl, exitValue);
     }
 
-    // Creating the top dir of home dir
-    private static void CreateDir(ProcessLinux pl, String topHomeDir) {
+    // Creating a dir
+    private static void CreateDir(ProcessLinux pl, String path) {
         int exitValue;
 
-        exitValue = pl.CreateDir(topHomeDir);
+        exitValue = pl.CreateDir(path);
 
-        System.out.println("Creating dir " + topHomeDir);
+        System.out.println("Creating dir " + path);
         PrintOutOrErr(pl, exitValue);
     }
 
     // Changing owner of a dir
-    private static void ChownDir(ProcessLinux pl, String topHomeDir,
+    private static void ChownDir(ProcessLinux pl, String path,
                                  String username, String groupName) {
         int exitValue;
 
-        exitValue = pl.ChownDir(topHomeDir, username, groupName);
+        exitValue = pl.ChownDir(path, username, groupName);
 
-        System.out.println("Changing owner of dir " + topHomeDir);
+        System.out.println("Changing owner of dir " + path);
+        PrintOutOrErr(pl, exitValue);
+    }
+
+    // Change the mode of dir
+    private static void ChmodDir(ProcessLinux pl, String path,
+                                 String mode) {
+        int exitValue;
+
+        exitValue = pl.ChmodDir(path, mode);
+
+        System.out.println("Changing mode of dir " + path);
         PrintOutOrErr(pl, exitValue);
     }
 
